@@ -18,7 +18,7 @@ Prerequisites
 
 Clone the repository
 
-    git clone https://vm-bitbucket-prd3.nemetschek.bg/scm/nem/centermine.git
+    git clone https://github.com/vrosen/emerchantpay.git
 
 Go to src directory and run 
 
