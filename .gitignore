@@ -1,0 +1,6 @@
+src/vendor/*
+src/composer.lock
+.idea
+front/node_modules
+front/package-lock.json
+front/yarn.lock

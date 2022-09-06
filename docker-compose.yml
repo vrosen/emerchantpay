@@ -1,0 +1,59 @@
+version: "3.7"
+services:
+  app:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    image: empay
+    container_name: empay-app
+    restart: unless-stopped
+    tty: true
+    environment:
+      SERVICE_NAME: app
+      SERVICE_TAGS: dev
+    working_dir: /var/www/html/
+    volumes:
+      - ./:/var/www/html
+    depends_on:
+      - db
+    ports:
+      - "8000:80"
+      - "443:443"
+    networks:
+      - empay
+  db:
+    image: mariadb:latest
+    container_name: empay-db
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_DATABASE: 'empay'
+      MYSQL_ROOT_PASSWORD: 'root'
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+    volumes:
+      - dbdata:/var/lib/mysql
+      - ./docker-compose/mysql:/docker-entrypoint-initdb.d
+    networks:
+      - empay
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    restart: unless-stopped
+    environment:
+      PMA_HOST: db
+      PMA_PASSWORD: 'root'
+      UPLOAD_LIMIT: 1G
+    depends_on:
+      - db
+    ports:
+      - "8081:80"
+    networks:
+      - empay
+networks:
+  empay:
+    driver: bridge
+volumes:
+  dbdata:
+    driver: local
